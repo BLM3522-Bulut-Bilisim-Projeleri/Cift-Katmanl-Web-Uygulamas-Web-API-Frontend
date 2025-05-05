@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const TicketList = ({ refreshTrigger }) => {
   const [tickets, setTickets] = useState([]);
   const [editTitle, setEditTitle] = useState('');
@@ -11,7 +13,7 @@ const TicketList = ({ refreshTrigger }) => {
 
   const fetchTickets = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/tickets');
+      const response = await axios.get(`${API_URL}/api/tickets`);
       setTickets(response.data);
     } catch (err) {
       console.error('Ticketlar çekilemedi:', err);
@@ -21,7 +23,7 @@ const TicketList = ({ refreshTrigger }) => {
   const deleteTicket = async (id) => {
     if (!window.confirm("Bu talebi silmek istediğinize emin misiniz?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/tickets/${id}`);
+      await axios.delete(`${API_URL}/api/tickets/${id}`);
       fetchTickets();
     } catch (err) {
       console.error('Silme hatası:', err);
@@ -44,7 +46,7 @@ const TicketList = ({ refreshTrigger }) => {
 
   const saveEdit = async () => {
     try {
-      await axios.put(`http://localhost:8080/api/tickets/${modalTicket.id}`, {
+      await axios.put(`${API_URL}/api/tickets/${modalTicket.id}`, {
         title: editTitle,
         description: editDescription,
         status: modalTicket.status,
@@ -60,11 +62,11 @@ const TicketList = ({ refreshTrigger }) => {
     const nextStatus = ticket.status === 'Beklemede'
       ? 'Çözülüyor'
       : ticket.status === 'Çözülüyor'
-      ? 'Tamamlandı'
-      : 'Beklemede';
+        ? 'Tamamlandı'
+        : 'Beklemede';
 
     try {
-      await axios.put(`http://localhost:8080/api/tickets/${ticket.id}`, {
+      await axios.put(`${API_URL}/api/tickets/${ticket.id}`, {
         title: ticket.title,
         description: ticket.description,
         status: nextStatus,
@@ -100,8 +102,8 @@ const TicketList = ({ refreshTrigger }) => {
               <span style={{
                 backgroundColor: ticket.status === 'Beklemede' ? '#ffcc00'
                   : ticket.status === 'Çözülüyor' ? '#00bfff'
-                  : ticket.status === 'Tamamlandı' ? '#4caf50'
-                  : '#ccc',
+                    : ticket.status === 'Tamamlandı' ? '#4caf50'
+                      : '#ccc',
                 color: 'white',
                 borderRadius: '5px',
                 padding: '2px 6px',
@@ -110,25 +112,9 @@ const TicketList = ({ refreshTrigger }) => {
                 {ticket.status}
               </span>
               &nbsp;
-              <button
-  onClick={() => startEdit(ticket)}
-  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
->
-  Düzenle
-</button>
-<button
-  onClick={() => deleteTicket(ticket.id)}
-  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
->
-  Sil
-</button>
-<button
-  onClick={() => changeStatus(ticket)}
-  className="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-800"
->
-  Durumu Değiştir
-</button>
-
+              <button onClick={() => startEdit(ticket)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Düzenle</button>
+              <button onClick={() => deleteTicket(ticket.id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Sil</button>
+              <button onClick={() => changeStatus(ticket)} className="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-800">Durumu Değiştir</button>
             </li>
           ))}
       </ul>
@@ -152,14 +138,8 @@ const TicketList = ({ refreshTrigger }) => {
             boxShadow: '0 0 10px rgba(0,0,0,0.3)'
           }}>
             <h3>Talebi Düzenle - #{modalTicket?.id}</h3>
-            <input
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-            />
-            <textarea
-              value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
-            />
+            <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+            <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} />
             <br />
             <button onClick={saveEdit}>Kaydet</button>
             <button onClick={cancelEdit}>İptal</button>

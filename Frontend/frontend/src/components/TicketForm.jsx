@@ -1,6 +1,7 @@
-// src/components/TicketForm.jsx
 import { useState } from 'react';
 import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const TicketForm = ({ onTicketCreated }) => {
   const [title, setTitle] = useState('');
@@ -11,7 +12,7 @@ const TicketForm = ({ onTicketCreated }) => {
     const newTicket = { title, description, status: 'Beklemede' };
 
     try {
-      await axios.post('http://localhost:8080/api/tickets', newTicket);
+      await axios.post(`${API_URL}/api/tickets`, newTicket);
       setTitle('');
       setDescription('');
       onTicketCreated(); // listeyi yenile

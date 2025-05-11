@@ -78,6 +78,8 @@ VITE_API_URL=http://<sunucu_ip_adresi>:8080
 ## 📌 Notlar
 - EC2 güvenlik grubunda 8080 (backend) ve 5174 (frontend) portları açılmalıdır.
 - Veritabanı bağlantı bilgileri `application.properties` dosyasında tanımlanmalıdır.
+## Youtube
+https://youtu.be/EyBI3W_OHvs
 
 ## 👤 Geliştirici
 Ömer Doğan
